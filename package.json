@@ -1,0 +1,27 @@
+{
+  "name": "rest-api-boilerplate",
+  "version": "1.0.0",
+  "description": "Boilerplate for building REST APIs with node.js and MongoDB ",
+  "main": "server/index.js",
+  "dependencies": {
+    "body-parser": "1.17.0",
+    "express": "4.15.2",
+    "logger": "0.0.1",
+    "mongoose": "4.9.2"
+  },
+  "devDependencies": {
+    "jasmine": "2.5.0",
+    "mocha": "3.2.0"
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha"
+  },
+  "keywords": [
+    "API",
+    "boilerplate",
+    "MongoDB",
+    "REST"
+  ],
+  "author": "Alaeddine Mokri <alaeddinemokri@gmail.com>",
+  "license": "MIT"
+}
