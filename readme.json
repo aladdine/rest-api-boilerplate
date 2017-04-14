@@ -1,0 +1,9 @@
+{
+	"necessary_installs": ["node"],
+	"optional_installs": ["mongodb"],
+	"command_to_download_npm_packages": "npm install",
+	"command_to_start_app": "node server/index.js",
+	"command_to_run_unit_tests": "npm test",
+	"command_to_generate_test_report": "node_modules/mocha/bin/mocha --reporter doc > test-report.html",
+	"demo": "https://www.youtube.com/watch?v=wIbL_vA3p78"
+}

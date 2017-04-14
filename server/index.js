@@ -25,13 +25,16 @@
 
 	app.use(bodyParser.json());
 
-	// Setup mongoose database connection
+	// Setup mongoose database connection. 
+	// To use local MongoDB instance, replace line below with: mongoose.connect('mongodb://localhost/db');
+	// We use mLab here because of the simplified overhead, ease of deplyment and analytics tools it provides.
+	// mongoose.connect('mongodb://carratingdev:carratingdev00@ds145800.mlab.com:45800/car-ratings'); 
 	mongoose.connect('mongodb://localhost/db');
 	var db = mongoose.connection;
 
 	// setup default API endpoint
 	app.get('/', function (req,res){
-		res.send('API running. Please refer to documentation for access and usage.');
+		res.send({"message":"API running. Please refer to documentation for access and usage."});
 	});
 
 	// APIs and correponding endpoints

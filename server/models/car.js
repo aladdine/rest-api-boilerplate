@@ -36,12 +36,11 @@
 		// keep query obj empty to return all cars
 		var query = {};
 		
-		car.find(query,callback);
+		car.find(query,options,callback);
 	}
 
 	// get one car by id
 	module.exports.getOneCarById = function(id, callback){
-
 		// Remove unnecessary properties to match response specs.
 		var options = {"_id": 0, "__v": 0};
 		car.findById(id, options, callback);

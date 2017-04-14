@@ -31,15 +31,15 @@
 		});
 	});
 
-	// getting one rating
+	// getting ratings by id
 	router.get('/:id', function(req,res){
-		rating.getOneRatingById(req.params.id,function(err,rating){
+		rating.getRatingsById(req.params.id,function(err,ratings){
 			if(err){
 				res.send({error : err});
 			} else {
 				// get car specs corresponding to rating
-				getAllSpecs([rating],[],function(out){
-					res.send({results:out[0]});
+				getAllSpecs(ratings,[],function(out){
+					res.send({results:out});
 				});	
 			}
 		});
@@ -52,10 +52,10 @@
 
 		// this array holds the properties to calculate average
 		var properties_to_average = ["interior","performance","reliability","safety","technology"];
+		// these weights allow calculating weighted averages. The order needs to match properties.
 		var property_weights = [1,1,1,1,1];
-		// calculate average value of 
-		var rating_values.overall = averagedWeights(req.body,properties_to_average,property_weights);
-		
+		// calculate average value of ratings
+		rating_values.overall = averagedWeights(req.body,properties_to_average,property_weights);
 		rating.addOneRating(rating_values, function(err,rating){
 			if(err){
 				res.send({error : err});
@@ -71,8 +71,11 @@
 		
 		var rating_id = req.params.id;
 		var new_rating_values = req.body;
+		var properties_to_average = ["interior","performance","reliability","safety","technology"];
+		var property_weights = [1,1,1,1,1];
+		new_rating_values.overall = averagedWeights(req.body,properties_to_average,property_weights);
 		
-		rating.updateOneRating(car_id, new_rating_values, {}, function(err,rating){
+		rating.updateOneRating(rating_id, new_rating_values, {}, function(err,rating){
 			if(err){
 				res.send({error : err});
 			} else {
@@ -107,21 +110,24 @@
 			
 			// if a rating has a carId property, get the corresponding car properties
 			if (ratings[ratings.length-1]["carId"]) {
-			
+
 				car.getOneCarById(ratings[ratings.length-1]["carId"],function(err,car){
 
 					if (car) {
+
 						out.push({
 							model: format(car,"model"),
 							make: format(car,"make"),
 							year: format(car,"year"),
 							reviewedBy: format(ratings[ratings.length-1],"reviewedBy"),
 							reliability: format(ratings[ratings.length-1],"reliability"),
-							performance: format(ratings[ratings.length-1],"safety"),
+							performance: format(ratings[ratings.length-1],"performance"),
+							safety: format(ratings[ratings.length-1],"safety"),
 							technology: format(ratings[ratings.length-1],"technology"),
 							interior: format(ratings[ratings.length-1],"interior"),
 							overall: format(ratings[ratings.length-1],"overall")
 						});
+
 					}
 
 					// remove the rating processed already from array and continue to next 
@@ -134,6 +140,8 @@
 				ratings.pop();
 				getAllSpecs(ratings, out, callback);
 			}
+
+
 		
 		}
 	}
@@ -152,6 +160,7 @@
 			performance: null,
 			technology: null,
 			interior: null,
+			safety: null,
 			overall: null
 		}
 
@@ -164,12 +173,12 @@
 	}
 
 	// calculate overall rating by averaging properties
-	function averageWeights(obj,array_of_properties,property_weights){
+	function averagedWeights(obj,array_of_properties,property_weights){
 		
 		var sum = 0;
 		var n = 0;
 
-		for (var i =0; i < n; i++) {
+		for (var i = 0; i < array_of_properties.length; i++) {
 			if(obj.hasOwnProperty(array_of_properties[i])){
 				sum += obj[array_of_properties[i]]*property_weights[i];
 				n += property_weights[i]; 

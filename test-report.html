@@ -1,0 +1,94 @@
+    <section class="suite">
+      <h1>POST, GET, UPDATE, DELETE Cars: </h1>
+      <dl>
+        <section class="suite">
+          <h1>POST car request: </h1>
+          <dl>
+            <dt>should return success message</dt>
+            <dd><pre><code>server.post(&quot;/api/cars&quot;)
+.send(valid_car_specs)
+		    .expect(&quot;Content-type&quot;,/json/)
+		    .expect(200) // THis is HTTP response
+		    .end(function(err,res){
+		     	res.status.should.equal(200);
+		     	res.body.message.should.equal(&quot;car added successfully&quot;); 
+		     	done();
+		    });</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>POST car request: </h1>
+          <dl>
+            <dt>should return error message</dt>
+            <dd><pre><code>server.post(&quot;/api/cars&quot;)
+.send(invalid_car_specs)
+		    .expect(&quot;Content-type&quot;,/json/)
+		    .expect(200) // THis is HTTP response
+		    .end(function(err,res){
+		     	res.status.should.equal(200);
+		     	res.body.error.message.should.equal(&quot;car validation failed&quot;);  
+		     	done();
+		    });</code></pre></dd>
+          </dl>
+        </section>
+        <section class="suite">
+          <h1>GET all cars request: </h1>
+          <dl>
+            <dt>should return success message</dt>
+            <dd><pre><code>server.get(&quot;/api/cars&quot;)
+		    .expect(&quot;Content-type&quot;,/json/)
+		    .expect(200) // THis is HTTP response
+		    .end(function(err,res){
+		    	
+		    	// status code should be 200
+		     	res.status.should.equal(200);
+		     	
+		     	// type of results should be of type array
+		     	(Array.isArray(res.body.results)).should.be.true(); 
+
+		     	// all elements of array should have 3 properties: model, make and year per the spec
+	     		for (var i = 0; i &lt; res.body.results.length; i++){
+	     			(Object.keys(res.body.results[i]).length === car_properties.length).should.be.true();
+	     			for (var j = 0; j &lt; car_properties.length; j++){
+	     				(res.body.results[i].hasOwnProperty(car_properties[j])).should.be.true(); 
+	     			}
+	     		}
+     	 
+		     	done();
+		    });</code></pre></dd>
+          </dl>
+        </section>
+      </dl>
+    </section>
+    <section class="suite">
+      <h1>POST, GET, UPDATE, DELETE Ratings: </h1>
+      <dl>
+        <section class="suite">
+          <h1>GET all ratings request: </h1>
+          <dl>
+            <dt>should return success message</dt>
+            <dd><pre><code>server.get(&quot;/api/ratings&quot;)
+		    .expect(&quot;Content-type&quot;,/json/)
+		    .expect(200) // THis is HTTP response
+		    .end(function(err,res){
+
+		    	// status code should be 200
+		     	res.status.should.equal(200);
+		     	
+		     	// type of results should be of type array
+		     	(Array.isArray(res.body.results)).should.be.true(); 
+
+		     	// all elements of array should have all ratings properties per the spec
+	     		for (var i = 0; i &lt; res.body.results.length; i++){
+	     			(Object.keys(res.body.results[i]).length === rating_properties.length).should.be.true();
+	     			for (var j = 0; j &lt; rating_properties.length; j++){
+	     				(res.body.results[i].hasOwnProperty(rating_properties[j])).should.be.true(); 
+	     			}
+	     		}
+     	 
+		     	done();
+		    });</code></pre></dd>
+          </dl>
+        </section>
+      </dl>
+    </section>

@@ -63,20 +63,19 @@
 	var rating = module.exports = mongoose.model("rating", rating_schema);
 
 	// get all ratings
-	module.exports.getAllRatings = function(callback, limit){
-
-		// Mongoose returns data with unnecessary properties. Remove them to match response specs.
-		var options = {"_id": 0, "__v": 0};
-		
+	module.exports.getAllRatings = function(callback){		
 		// keep query object empty to return all ratings
 		var query = {};
-		rating.find(query,options,callback).limit(limit);
+		rating.find(query,callback);
 	}
 
-	// get one rating by id
-	module.exports.getOneRatingById = function(id, callback){
+	// get ratings by id
+	module.exports.getRatingsById = function(id, callback){
 		var options = {"_id": 0, "__v": 0};
-		rating.findById(id, options, callback);
+		var query = {
+			carId: id
+		};
+		rating.find(query, options, callback);
 	}
 
 	// add one rating
@@ -94,7 +93,7 @@
 
 		var data = new_rating_values;
 
-		rating.findOneAndUpdate(query, data, options, callback);
+		rating.findOneAndUpdate(query, data, {}, callback);
 	}
 
 	// find rating by id and delete it
